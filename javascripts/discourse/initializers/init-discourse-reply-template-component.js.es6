@@ -98,6 +98,7 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
   }
 
   const dataset = wrap.dataset;
+  const postIdentifier = `d-placeholder-${post.get('topic').id}-${post.id}-`;
 
   return ajax(`/posts/${post.id}`, {
     cache: false
@@ -111,6 +112,20 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
     const match = regex.exec(data.raw || "");
 
     const replacers = [
+      {
+        regex: /(\=question=)/g,
+        fn: () => {
+          const placeholderIdentifier = `${postIdentifier}question`;
+          return $.cookie(placeholderIdentifier) || placeholderIdentifier;
+        }
+      },
+      {
+        regex: /(\=reponse=)/g,
+        fn: () => {
+          const placeholderIdentifier = `${postIdentifier}reponse`;
+          return $.cookie(placeholderIdentifier) || placeholderIdentifier;
+        }
+      },
       {
         regex: /(\$tomorrow)/g,
         fn: () => {
