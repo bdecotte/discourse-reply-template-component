@@ -6,6 +6,7 @@ import { ajax } from "discourse/lib/ajax";
 import { getOwner } from "discourse-common/lib/get-owner";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Composer from "discourse/models/composer";
+import cookie, { removeCookie } from "discourse/lib/cookie";
 
 function buildButton(dataset, extraClass) {
   const action = dataset.action || "reply";
@@ -124,14 +125,14 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
         regex: /(\=question=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}question`;
-          return $.cookie(placeholderIdentifier) || placeholderIdentifier;
+          return cookie(placeholderIdentifier) || placeholderIdentifier;
         }
       },
       {
         regex: /(\=reponse=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}reponse`;
-          return $.cookie(placeholderIdentifier) || placeholderIdentifier;
+          return cookie(placeholderIdentifier) || placeholderIdentifier;
         }
       },
       {
