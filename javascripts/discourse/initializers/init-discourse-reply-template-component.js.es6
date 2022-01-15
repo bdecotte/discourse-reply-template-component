@@ -222,7 +222,7 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
 export default {
   name: "discourse-reply-template-component-setup",
 
-  initialize() {
+  initialize(container) {
     withPluginApi("0.8", api => {
       api.decorateCookedElement(
         (cooked, helper) => {
