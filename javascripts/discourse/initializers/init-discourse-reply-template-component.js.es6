@@ -7,6 +7,10 @@ import { getOwner } from "discourse-common/lib/get-owner";
 import { withPluginApi } from "discourse/lib/plugin-api";
 import Composer from "discourse/models/composer";
 
+const EXPIRE_AFTER_DAYS = 7;
+const EXPIRE_AFTER_SECONDS = EXPIRE_AFTER_DAYS * 24 * 60 * 60;
+const STORAGE_PREFIX = "d-placeholder-";
+
 function buildButton(dataset, extraClass) {
   const action = dataset.action || "reply";
   const label = dataset.label;
@@ -124,14 +128,14 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
         regex: /(\=question=)/g,
         fn: function(){
           const placeholderIdentifier = `${postIdentifier}question`;
-          return Object.getValue(placeholderIdentifier) || placeholderIdentifier;
+          return this.getValue(placeholderIdentifier) || placeholderIdentifier;
         }
       },
       {
         regex: /(\=reponse=)/g,
         fn: function(){
           const placeholderIdentifier = `${postIdentifier}reponse`;
-          return Object.getValue(placeholderIdentifier) || placeholderIdentifier;
+          return this.getValue(placeholderIdentifier) || placeholderIdentifier;
         }
       },
       {
@@ -221,8 +225,19 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
 
 export default {
   name: "discourse-reply-template-component-setup",
-
+  
+  getValue(key) {
+    const data = this.keyValueStore.getObject(`${STORAGE_PREFIX}${key}`);
+    if (data) {
+      data.expires = Date.now() + EXPIRE_AFTER_SECONDS;
+      this.keyValueStore.setObject(`${STORAGE_PREFIX}${key}`, data);
+      return data.value;
+    }
+  },
+  
   initialize(container) {
+    this.keyValueStore = container.lookup("key-value-store:main");
+    
     withPluginApi("0.8", api => {
       api.decorateCookedElement(
         (cooked, helper) => {
