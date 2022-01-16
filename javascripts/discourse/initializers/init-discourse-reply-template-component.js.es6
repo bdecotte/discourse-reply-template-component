@@ -128,14 +128,14 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
         regex: /(\=question=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}question`;
-          return Object.keys(window.localStorage).keyValueStore.getObject(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
+          return window.localStorage.getItem(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
         }
       },
       {
         regex: /(\=reponse=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}reponse`;
-          return Object.keys(window.localStorage).keyValueStore.getObject(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
+          return window.localStorage.getItem(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
         }
       },
       {
