@@ -128,7 +128,7 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
         regex: /(\=question=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}question`;
-          console.log(`${STORAGE_PREFIX}${placeholderIdentifier}`);
+          console.log(window.localStorage.getItem(`${STORAGE_PREFIX}${placeholderIdentifier}`).value);
           return window.localStorage.getItem(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
         }
       },
