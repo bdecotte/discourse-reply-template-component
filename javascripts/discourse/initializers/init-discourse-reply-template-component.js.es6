@@ -9,7 +9,7 @@ import Composer from "discourse/models/composer";
 
 const EXPIRE_AFTER_DAYS = 7;
 const EXPIRE_AFTER_SECONDS = EXPIRE_AFTER_DAYS * 24 * 60 * 60;
-const STORAGE_PREFIX = "d-placeholder-";
+const STORAGE_PREFIX = "discourse_d-placeholder-";
 
 function buildButton(dataset, extraClass) {
   const action = dataset.action || "reply";
@@ -128,14 +128,15 @@ function openComposerWithTemplateAndAction(controller, post, wrap) {
         regex: /(\=question=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}question`;
-          return window.localStorage.getObject(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
+          console.log(`${STORAGE_PREFIX}${placeholderIdentifier}`);
+          return window.localStorage.getItem(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
         }
       },
       {
         regex: /(\=reponse=)/g,
         fn: () => {
           const placeholderIdentifier = `${postIdentifier}reponse`;
-          return window.localStorage.getObject(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
+          return window.localStorage.getItem(`${STORAGE_PREFIX}${placeholderIdentifier}`).value || placeholderIdentifier;
         }
       },
       {
